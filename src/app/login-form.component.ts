@@ -69,7 +69,7 @@ import { Authentication } from './authentication.service';
     </main>
   `
 })
-export default class LoginForm {
+export default class LoginFormComponent {
   authentication;
   constructor() {
     this.authentication = inject(Authentication);

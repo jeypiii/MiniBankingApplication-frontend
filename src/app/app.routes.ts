@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import LoginForm from './loginform.component';
+import LoginFormComponent from './login-form.component';
 
 export const routes: Routes = [
     {
-        'path': 'login',
+        path: 'login',
         title: 'Login',
-        component: LoginForm,
+        component: LoginFormComponent,
     }
 ];
