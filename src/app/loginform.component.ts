@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroKey, heroAtSymbol, heroArrowRight } from '@ng-icons/heroicons/outline'
 
 import "@fontsource/lusitana";
+import { Authentication } from './authentication.service';
 
 @Component({
   selector: 'login-form',
@@ -14,7 +15,7 @@ import "@fontsource/lusitana";
       <h1 class="mb-4 text-xl md:text-2xl">
         Login
       </h1>
-      <form class="space-y-3" >
+      <form class="space-y-3" (submit)="this.authentication.login($event)">
         <div class="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
           <h1 class="mb-3 text-2xl">
             Please log in to continue.
@@ -69,4 +70,8 @@ import "@fontsource/lusitana";
   `
 })
 export default class LoginForm {
+  authentication;
+  constructor() {
+    this.authentication = inject(Authentication);
+  }
 }
