@@ -20,4 +20,8 @@ export class Utilities {
   clearAuthToken(redirectToLogin: boolean = true) : void {
       sessionStorage.removeItem("authToken")
   }
+
+  getServerUrl() {
+    return 'http://localhost:8080';
+  }
 }

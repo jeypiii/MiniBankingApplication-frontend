@@ -21,7 +21,7 @@ export class Authentication {
         "password": loginForm.get("password")
     };
 
-    return fetch("http://localhost:8080/api/auth/login", {
+    return fetch(`${this.utilities.getServerUrl()}/api/auth/login`, {
         method: "POST",
         headers: {
                "Content-Type": "application/json",
