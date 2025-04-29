@@ -11,6 +11,7 @@ export type AccountType = {
 
 export type Account = {
     accountId: number,
+    accountNumber: number,
     userId: number,
     ownerName: string,
     accountType: AccountType,

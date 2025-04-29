@@ -8,8 +8,8 @@ import { Account } from '../types/account';
       <div class="rounded-xl bg-gray-50 p-2 shadow-sm min-w-max">
       <div class="flex p-4">
         <!-- {Icon ? <Icon class="h-5 w-5 text-gray-700" /> : null} -->
-        <h3 class="ml-2 text-sm font-medium">{{this.account.accountType.name.toLowerCase()}}</h3>
-        <h5 class="block ml-2 text-sm font-small ml-6">Id: {{ this.account.accountId }}</h5>
+        <h3 class="ml-2 text-sm font-mono font-extrabold">{{this.account.accountNumber}}</h3>
+        <!-- <h5 class="block ml-2 text-sm font-small ml-6">Id: {{ this.account.accountId }}</h5> -->
       </div>
   
       <div class="rounded-xl bg-white px-4 py-8 text-left text-sxs shrink-0 min-w-max">
@@ -26,6 +26,7 @@ import { Account } from '../types/account';
 export class AccountCardComponent {
   account: Account = {
       accountId: 1,
+      accountNumber: 123456789,
       userId: 1,
       ownerName: "Test",
       accountType: {
