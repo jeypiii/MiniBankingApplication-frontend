@@ -38,8 +38,7 @@ export class AccountCardComponent {
   displayDetails = {
     "Account Id": this.account.accountId,
     "Owner": this.account.ownerName,
-    "Type": this.account.accountType.name.toLowerCase(),
+    "Type": this.account.accountType.name[0].toUpperCase() + this.account.accountType.name.substring(1).toLowerCase(),
   }
   displayDetailItems = Object.entries(this.displayDetails);
-  
 }
