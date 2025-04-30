@@ -25,7 +25,7 @@ import { TransactionCardComponent } from "../transaction-card.component";
             @for (transaction of this.transactions; 
                 track "account-" + this.account.accountId + '-transaction-' + transaction.transactionId
             ) {
-              <app-transaction-card [transaction]="transaction" />
+              <app-transaction-card [transaction]="transaction" [relativeToAccountWithId]="this.account.accountId" />
             }
           } @else {
             <h3 class="ml-2 text-l">There are no transactions for this account</h3>

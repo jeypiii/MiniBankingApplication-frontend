@@ -29,6 +29,8 @@ import { Utilities } from './utils.service';
 })
 export class TransactionCardComponent {
   transaction = input.required<Transaction>();
+  relativeToAccountWithId = input<number>(-1);
+
   isClickable = input(true);
 
   utilities = inject(Utilities);
@@ -63,8 +65,13 @@ export class TransactionCardComponent {
     };
     
     if (this.shouldShowBalance && (this.transaction()?.affectedBalance?.totalBalance ?? null != null)) {
-      // TODO: show - or + depending on send/receive
       details["Amount"] = this.utilities.formatNetBalance(this.transaction().affectedBalance);
+      if (this.relativeToAccountWithId() != -1 && this.transaction().targetAccountId != this.transaction().sourceAccountId) {
+        const changeIndicator = (this.relativeToAccountWithId() == this.transaction().sourceAccountId)
+                                 ? '—'  // NOTE: em-dash for better visibility
+                                 : '+';
+        details["Amount"] = `${changeIndicator} ${details["Amount"]}`;
+      }
     }
 
     return details;
