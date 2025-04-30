@@ -22,7 +22,14 @@ export class AccountService {
 
   async getAccountsOfUser(userId: number, page?: number) 
   : Promise<AccountsPage> {
-    let endpoint = `${this.utilities.getServerUrl()}/api/accountsOfUser/${userId}?pageSize=0`;
+    let endpoint;
+    // HACK: for now, hardcode admin to userId 1
+    // NOTE: for admin, return ALL accounts
+    if (userId == 1) {
+        endpoint = `${this.utilities.getServerUrl()}/api/accounts?pageSize=0`;
+    } else {
+        endpoint = `${this.utilities.getServerUrl()}/api/accountsOfUser/${userId}?pageSize=0`;
+    }
     const bearerToken = this.utilities.getAuthToken();
     console.log("GET", endpoint, bearerToken);
     if (page) {

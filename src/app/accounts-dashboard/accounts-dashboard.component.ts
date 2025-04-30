@@ -9,7 +9,7 @@ import { AccountService, AccountsPage } from '../account.service';
   template: `
     <h1 class="mb-4 text-xl md:text-2xl">
       <div>
-      Accounts for user {{ curUserName }}
+      {{ headerMessage }}
       <!-- <Search setSearchString={(searchString: string) => {
               let newfilteredEmployees = employees;
               let filterChanged: boolean = false;
@@ -59,14 +59,18 @@ import { AccountService, AccountsPage } from '../account.service';
 export class AccountsDashboardComponent implements OnInit{
   accountsService = inject(AccountService);
   accounts: Account[] = [];
-  curUserName = "";
+  headerMessage = "";
 
   async ngOnInit() {
     const curUserId = this.accountsService.getCurUserId();
     const accountsPage: AccountsPage = await this.accountsService.getAccountsOfUser(curUserId);
     this.accounts = accountsPage.accounts;
-    if (this.accounts.length > 0) {
-      this.curUserName = this.accounts[0].ownerName;
+
+    // HACK: for now, hardcode admin to userId 1
+    if (curUserId == 1) {
+      this.headerMessage = "All accounts (admin view)";
+    } else if (this.accounts.length > 0) {
+      this.headerMessage = `Accounts for user ${this.accounts[0].ownerName}`;
     }
   };
 }
