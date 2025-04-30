@@ -7,7 +7,7 @@ import { Account } from '../types/account';
   imports: [AccountCardComponent],
   template: `
       testing
-      <div className="flex gap-6 flex-wrap justify-items-center">
+      <div class="flex flex-row gap-6 flex-wrap justify-items-center">
         @for(account of this.accounts; track "account-" + account.accountId) {
           <account-card [account]="account" />
         }
