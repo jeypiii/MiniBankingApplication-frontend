@@ -3,6 +3,7 @@ import { Transaction, TransactionTypes } from './types/transaction';
 import { Balance } from './types/account';
 import { Router } from '@angular/router';
 import { Utilities } from './utils.service';
+import { AccountService } from './account.service';
 
 @Component({
   selector: 'app-transaction-card',
@@ -31,9 +32,10 @@ export class TransactionCardComponent {
   transaction = input.required<Transaction>();
   relativeToAccountWithId = input<number>(-1);
 
-  isClickable = input(true);
+  isClickable = input(false);
 
   utilities = inject(Utilities);
+  accountService = inject(AccountService);
 
   constructor(private router: Router) {}
 
@@ -59,9 +61,6 @@ export class TransactionCardComponent {
   displayDetails = computed(() => { 
     let details: any = {
       "Transaction Id": this.transaction().transactionId,
-      // TODO: get account number instead of id
-      "Source Account No.": this.transaction().sourceAccountId,
-      "Target Account No.": this.transaction().targetAccountId,
     };
     
     if (this.shouldShowBalance && (this.transaction()?.affectedBalance?.totalBalance ?? null != null)) {
@@ -72,6 +71,10 @@ export class TransactionCardComponent {
                                  : '+';
         details["Amount"] = `${changeIndicator} ${details["Amount"]}`;
       }
+
+      // TODO: also add source and target for other types of transactions
+      details["Source Account No."] = `${this.transaction().sourceAccountNumber} (${this.transaction().sourceAccountOwnerName})`;
+      details["Target Account No."] = `${this.transaction().targetAccountNumber} (${this.transaction().targetAccountOwnerName})`;
     }
 
     return details;
