@@ -27,7 +27,7 @@ export class AccountDetailsComponent implements OnInit{
 
   async ngOnInit() {
     const accountId = parseInt(this.route.snapshot.paramMap.get('id') as string);
-    const accountGet: Account | null = await this.accountsService.getAccount(accountId);
+    const accountGet: Account | null = await this.accountsService.getAccount(accountId, true);
     if (!accountGet) {
       const errMsg = `Fetch for account with id ${accountId} failed`;
       console.error(errMsg);

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Utilities } from './utils.service';
-import { Account } from './types/account';
+import { Account, Balance } from './types/account';
 
 export type AccountsPage = {
     accounts: Account[],
@@ -91,9 +91,15 @@ export class AccountService {
         }
     }).then(async (response) => {
     if (response.ok) {
-        const account = await response.json()
+        let account = await response.json()
 
-        // TODO: add balance
+        if (withBalance) {
+            const balance = await this.getBalance(accountId);
+            if (balance) {
+                account.balance = balance;
+            }
+            // TODO: handle balance === null
+        }
         console.log("account ", account);
         return account;
     } else {
@@ -103,6 +109,43 @@ export class AccountService {
         return null;
     }
     }).then((promiseReturnVal: Account | null) => {
+        if (promiseReturnVal === null) {
+            // TODO: send dummy account value on error?
+            returnVal = null;
+        } else {
+            returnVal = promiseReturnVal;
+        }
+
+        console.warn("RETURNING", returnVal);
+        return returnVal;
+    });
+  }
+
+  async getBalance(accountId: number) 
+  : Promise<Balance | null> {
+    let endpoint = `${this.utilities.getServerUrl()}/api/getBalance/${accountId}`;
+    const bearerToken = this.utilities.getAuthToken();
+    console.log("GET", endpoint, bearerToken);
+
+    let returnVal: Balance | null;
+    return await fetch(endpoint, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": bearerToken
+        }
+    }).then(async (response) => {
+    if (response.ok) {
+        const balance: Balance = await response.json()
+        console.log("balance ", balance);
+        return balance;
+    } else {
+        const errorMessage = await response.text();
+        alert("ERROR: " + errorMessage);
+
+        return null;
+    }
+    }).then((promiseReturnVal: Balance | null) => {
         if (promiseReturnVal === null) {
             // TODO: send dummy account value on error?
             returnVal = null;
