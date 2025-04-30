@@ -9,7 +9,7 @@ import { Account } from '../types/account';
       testing
       <div class="flex flex-row gap-6 flex-wrap justify-items-center">
         @for(account of this.accounts; track "account-" + account.accountId) {
-          <account-card [account]="account" />
+          <app-account-card [account]="account" />
         }
       </div>
   `,

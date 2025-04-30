@@ -2,13 +2,13 @@ import { Component, input, computed } from '@angular/core';
 import { Account } from '../types/account';
 
 @Component({
-  selector: 'account-card',
+  selector: 'app-account-card',
   imports: [],
   template: `
       <div class="rounded-xl bg-gray-50 p-2 shadow-sm min-w-max">
       <div class="flex p-4">
         <!-- {Icon ? <Icon class="h-5 w-5 text-gray-700" /> : null} -->
-        <h3 class="ml-2 text-sm font-mono font-extrabold">{{ this.account().accountNumber }}</h3>
+        <h3 class="ml-2 text-sm font-mono font-extrabold">Account No. {{ accountNumber() }}</h3>
         <!-- <h5 class="block ml-2 text-sm font-small ml-6">Id: {{ this.account.accountId }}</h5> -->
       </div>
   
@@ -25,6 +25,17 @@ import { Account } from '../types/account';
 })
 export class AccountCardComponent {
   account = input.required<Account>();
+
+  accountNumber = computed(() => {
+    const accountNumberString = this.account().accountNumber.toString();
+    return (
+      accountNumberString.substring(0, 4)
+      + '-' + 
+      accountNumberString.substring(4, 7)
+      + '-' + 
+      accountNumberString.substring(7, 9)
+    );
+  });
 
   displayDetails = computed(() => { 
     return {
