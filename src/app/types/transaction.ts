@@ -15,7 +15,11 @@ export type Transaction = {
     transactionId: number,
     transactionType: TransactionType,
     sourceAccountId: number,
+    sourceAccountNumber: number,
+    sourceAccountOwnerName: string,
+    targetAccountOwnerName: string,
     targetAccountId: number,
+    targetAccountNumber: number,
     affectedBalance: Balance;
     creationTimeStamp: Date,
     closureTimeStamp: Date,
