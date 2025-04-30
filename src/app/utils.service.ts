@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Balance } from './types/account';
+import { Balance, AccountDetails, Account, AccountType } from './types/account';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +38,13 @@ export class Utilities {
 
   formatNetBalance(balance: Balance) {
     return `${balance.currencyCode} ${balance.totalBalance}`;
+  }
+
+  formatAccountType(accountType: AccountType) {
+      return accountType.name[0].toUpperCase() + accountType.name.substring(1).toLowerCase();
+  }
+
+  formatAccountDetails(accountDetails: AccountDetails) {
+    return `${accountDetails.accountNumber} (${accountDetails.ownerName} - ${this.formatAccountType(accountDetails.accountType)})`
   }
 }
