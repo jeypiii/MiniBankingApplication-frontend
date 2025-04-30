@@ -20,9 +20,9 @@ export class AccountService {
     return this.utilities.getCurUserId();
   }
 
-  async getAccountsOfUser(accountId: number, page?: number) 
+  async getAccountsOfUser(userId: number, page?: number) 
   : Promise<AccountsPage> {
-    let endpoint = `${this.utilities.getServerUrl()}/api/accountsOfUser/${accountId}`;
+    let endpoint = `${this.utilities.getServerUrl()}/api/accountsOfUser/${userId}`;
     const bearerToken = this.utilities.getAuthToken();
     console.log("GET", endpoint, bearerToken);
     if (page) {
@@ -41,9 +41,14 @@ export class AccountService {
         const accountsPage = await response.json()
 
         let accounts = accountsPage["content"];
-        accounts.forEach((e: any) => {
-          e.accountTypeId = e.accountType.typeId;
-        });
+        // accounts.forEach((a: Account) => {
+        //     if (a?.balance ?? null == null) {
+        //         a.balance = {
+        //             depositBalance: "*****",
+        //             totalBalance: "*************",
+        //         }
+        //     }
+        // });
         console.log("accountS ", accounts);
         return {
             accounts: accounts,
