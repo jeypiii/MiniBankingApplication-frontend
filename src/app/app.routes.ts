@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import LoginFormComponent from './login-form.component';
-import { AccountCardComponent } from './account-card/account-card.component';
+import { AccountListComponent } from './account-list/account-list.component';
 
 export const routes: Routes = [
     {
@@ -11,6 +11,6 @@ export const routes: Routes = [
     {
         path: 'accounts',
         title: 'Accounts',
-        component: AccountCardComponent,
+        component: AccountListComponent,
     }
 ];
