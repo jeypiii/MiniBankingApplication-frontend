@@ -1,12 +1,13 @@
 import { Component, input, computed } from '@angular/core';
-import { Account } from '../types/account';
+import { Account, Balance } from '../types/account';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-card',
   imports: [],
   template: `
-      <div class="rounded-xl bg-gray-50 p-2 shadow-sm min-w-max cursor-pointer"
-        (click)="goToAccountDetails()"
+      <div class="rounded-xl bg-gray-50 p-2 shadow-sm min-w-max {{ this.isClickable() ? 'cursor-pointer' : '' }}"
+          (click)="goToAccountDetails()"
       >
       <div class="flex p-4">
         <!-- {Icon ? <Icon class="h-5 w-5 text-gray-700" /> : null} -->
@@ -27,6 +28,9 @@ import { Account } from '../types/account';
 })
 export class AccountCardComponent {
   account = input.required<Account>();
+  isClickable = input(true);
+
+  constructor(private router: Router) {}
 
   accountNumber = computed(() => {
     const accountNumberString = this.account().accountNumber.toString();
@@ -40,15 +44,25 @@ export class AccountCardComponent {
   });
 
   displayDetails = computed(() => { 
-    return {
+    let details: any = {
       "Account Id": this.account().accountId,
       "Owner": this.account().ownerName,
       "Type": this.account().accountType.name[0].toUpperCase() + this.account().accountType.name.substring(1).toLowerCase(),
-    } 
+    };
+    
+    if (this.account()?.balance?.totalBalance ?? null != null) {
+      details["Net Balance"] = this.account().balance.totalBalance;
+    }
+
+    return details;
   });
   displayDetailItems = computed(() => Object.entries(this.displayDetails()));
 
   goToAccountDetails() {
-    alert("TODO: DETAILS");
+    if (!this.isClickable()) {
+      return;
+    }
+
+    this.router.navigate(['/account', this.account().accountId])
   }
 }
