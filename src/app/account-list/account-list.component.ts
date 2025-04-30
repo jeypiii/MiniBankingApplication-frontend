@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AccountCardComponent } from "../account-card/account-card.component";
+import { Account } from '../types/account';
 
 @Component({
   selector: 'app-account-list',
@@ -14,7 +15,7 @@ import { AccountCardComponent } from "../account-card/account-card.component";
   `,
 })
 export class AccountListComponent {
-  accounts = [
+  accounts: Account[] = [
     {
       accountId: 1,
       accountNumber: 100000001,
