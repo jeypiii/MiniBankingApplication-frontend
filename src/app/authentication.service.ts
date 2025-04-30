@@ -42,6 +42,7 @@ export class Authentication {
                 const bearerToken = "Bearer " + data.accessToken;
 
                 sessionStorage.setItem("authToken", bearerToken);
+                sessionStorage.setItem("userId", data.userId);
                 return true;
             });
 

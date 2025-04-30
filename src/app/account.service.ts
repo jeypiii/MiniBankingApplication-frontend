@@ -16,6 +16,10 @@ export class AccountService {
     this.utilities = inject(Utilities);
   }
 
+  getCurUserId() {
+    return this.utilities.getCurUserId();
+  }
+
   async getAccountsOfUser(accountId: number, page?: number) 
   : Promise<AccountsPage> {
     let endpoint = `${this.utilities.getServerUrl()}/api/accountsOfUser/${accountId}`;
