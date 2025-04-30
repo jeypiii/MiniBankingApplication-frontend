@@ -22,7 +22,7 @@ export class AccountService {
 
   async getAccountsOfUser(userId: number, page?: number) 
   : Promise<AccountsPage> {
-    let endpoint = `${this.utilities.getServerUrl()}/api/accountsOfUser/${userId}`;
+    let endpoint = `${this.utilities.getServerUrl()}/api/accountsOfUser/${userId}?pageSize=0`;
     const bearerToken = this.utilities.getAuthToken();
     console.log("GET", endpoint, bearerToken);
     if (page) {

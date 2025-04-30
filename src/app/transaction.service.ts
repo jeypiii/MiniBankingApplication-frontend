@@ -19,7 +19,7 @@ export class TransactionService {
 
   async getTransactionsForAccount(accountId: number, page?: number) 
   : Promise<TransactionsPage> {
-    let endpoint = `${this.utilities.getServerUrl()}/api/transactionsForAccount/${accountId}`;
+    let endpoint = `${this.utilities.getServerUrl()}/api/transactionsForAccount/${accountId}?pageSize=0`;
     const bearerToken = this.utilities.getAuthToken();
     console.log("GET", endpoint, bearerToken);
     if (page) {
