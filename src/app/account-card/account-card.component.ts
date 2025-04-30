@@ -50,7 +50,7 @@ export class AccountCardComponent {
     let details: any = {
       "Account Id": this.account().accountId,
       "Owner": this.account().ownerName,
-      "Type": this.account().accountType.name[0].toUpperCase() + this.account().accountType.name.substring(1).toLowerCase(),
+      "Type": this.utilities.formatAccountType(this.account().accountType),
     };
     
     if (this.account()?.balance?.totalBalance ?? null != null) {
