@@ -22,6 +22,7 @@ export type Account = {
 // AccountDto
 export type Balance = {
     // TODO: use class equivalent to BigDecimal
+    currencyCode: string,
     depositBalance: string,
     totalBalance: string,
 }

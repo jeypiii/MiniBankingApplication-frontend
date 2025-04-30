@@ -1,7 +1,8 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, inject } from '@angular/core';
 import { Transaction, TransactionTypes } from './types/transaction';
 import { Balance } from './types/account';
 import { Router } from '@angular/router';
+import { Utilities } from './utils.service';
 
 @Component({
   selector: 'app-transaction-card',
@@ -29,6 +30,8 @@ import { Router } from '@angular/router';
 export class TransactionCardComponent {
   transaction = input.required<Transaction>();
   isClickable = input(true);
+
+  utilities = inject(Utilities);
 
   constructor(private router: Router) {}
 
@@ -61,7 +64,7 @@ export class TransactionCardComponent {
     
     if (this.shouldShowBalance && (this.transaction()?.affectedBalance?.totalBalance ?? null != null)) {
       // TODO: show - or + depending on send/receive
-      details["Amount"] = this.transaction().affectedBalance.totalBalance;
+      details["Amount"] = this.utilities.formatNetBalance(this.transaction().affectedBalance);
     }
 
     return details;

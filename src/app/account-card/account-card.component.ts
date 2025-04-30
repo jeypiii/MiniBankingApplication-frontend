@@ -1,6 +1,7 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, inject } from '@angular/core';
 import { Account, Balance } from '../types/account';
 import { Router } from '@angular/router';
+import { Utilities } from '../utils.service';
 
 @Component({
   selector: 'app-account-card',
@@ -30,6 +31,8 @@ export class AccountCardComponent {
   account = input.required<Account>();
   isClickable = input(true);
 
+  utilities = inject(Utilities);
+
   constructor(private router: Router) {}
 
   accountNumber = computed(() => {
@@ -51,7 +54,7 @@ export class AccountCardComponent {
     };
     
     if (this.account()?.balance?.totalBalance ?? null != null) {
-      details["Net Balance"] = this.account().balance.totalBalance;
+      details["Net Balance"] = this.utilities.formatNetBalance(this.account().balance);
     }
 
     return details;

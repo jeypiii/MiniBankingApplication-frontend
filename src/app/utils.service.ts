@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Balance } from './types/account';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,9 @@ export class Utilities {
 
   getServerUrl() {
     return 'http://localhost:8080';
+  }
+
+  formatNetBalance(balance: Balance) {
+    return `${balance.currencyCode} ${balance.totalBalance}`;
   }
 }
