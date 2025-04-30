@@ -17,7 +17,7 @@ import { TransactionCardComponent } from "../transaction-card.component";
       </div>
     </h1>
     <div>
-        <app-account-card [account]="account" [isClickable]=true/>
+        <app-account-card [account]="account" [isClickable]=false/>
  
         <div class="m-5 p-5">
           <h2 class="ml-2 text-xl font-extrabold">Transaction History</h2>
