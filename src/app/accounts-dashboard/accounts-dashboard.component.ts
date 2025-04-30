@@ -9,7 +9,7 @@ import { AccountService, AccountsPage } from '../account.service';
   template: `
     <h1 class="mb-4 text-xl md:text-2xl">
       <div>
-      Accounts for User TODO: set user
+      Accounts for user {{ curUserName }}
       <!-- <Search setSearchString={(searchString: string) => {
               let newfilteredEmployees = employees;
               let filterChanged: boolean = false;
@@ -59,10 +59,14 @@ import { AccountService, AccountsPage } from '../account.service';
 export class AccountsDashboardComponent implements OnInit{
   accountsService = inject(AccountService);
   accounts: Account[] = [];
+  curUserName = "";
 
   async ngOnInit() {
     const curUserId = this.accountsService.getCurUserId();
     const accountsPage: AccountsPage = await this.accountsService.getAccountsOfUser(curUserId);
     this.accounts = accountsPage.accounts;
+    if (this.accounts.length > 0) {
+      this.curUserName = this.accounts[0].ownerName;
+    }
   };
 }

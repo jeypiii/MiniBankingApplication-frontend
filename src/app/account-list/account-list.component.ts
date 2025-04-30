@@ -6,7 +6,6 @@ import { Account } from '../types/account';
   selector: 'app-account-list',
   imports: [AccountCardComponent],
   template: `
-      testing
       <div class="flex flex-row gap-6 flex-wrap justify-items-center">
         @for(account of this.accounts(); track "account-" + account.accountId) {
           <app-account-card [account]="account" />
