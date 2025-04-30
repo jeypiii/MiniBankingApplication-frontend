@@ -1,0 +1,70 @@
+import { Component, inject, input, computed, OnChanges, signal, Signal, SimpleChanges, OnInit } from '@angular/core';
+import { AccountListComponent } from "../account-list/account-list.component";
+import { Account } from '../types/account';
+import { AccountService, AccountsPage } from '../account.service';
+
+@Component({
+  selector: 'app-accounts-dashboard',
+  imports: [AccountListComponent],
+  template: `
+    <h1 class="mb-4 text-xl md:text-2xl">
+      <div>
+      Accounts for User TODO: set user
+      <!-- <Search setSearchString={(searchString: string) => {
+              let newfilteredEmployees = employees;
+              let filterChanged: boolean = false;
+
+              if (!searchString) {
+                  filterChanged = true;
+              }
+              searchString = searchString.trim().toLowerCase();
+
+              if (searchString.length == 0) {
+                  filterChanged = true;
+              }
+
+              if (!filterChanged) {
+                  const tokens = searchString.split(" ");
+                  newfilteredEmployees = employees.filter((employee) => {
+                      const employeeDetails = JSON.stringify(Object.values(employee)).toLocaleLowerCase();
+                      for (let token of tokens) {
+                          if (employeeDetails.includes(token)) {
+                              return true;
+                              break;
+                          }
+                      }
+
+                      return false;
+                  });
+
+                  filterChanged = true;
+              }
+
+              if (filterChanged) {
+                  setFilteredEmployees(newfilteredEmployees);
+              }
+
+              console.log("AFTER FILTER", filteredEmployees, newfilteredEmployees);
+            }
+          }
+          placeholder="Search employee by name, salary, etc."
+      /> -->
+      </div>
+    </h1>
+    <div>
+        <app-account-list [accountsInput]="accounts"/>
+    </div>
+  `
+})
+export class AccountsDashboardComponent implements OnInit{
+  // curUserId = input.required<number>();
+  curUserId = signal(2);
+
+  accountsService = inject(AccountService);
+  accounts: Account[] = [];
+
+  async ngOnInit() {
+    const accountsPage: AccountsPage = await this.accountsService.getAccountsOfUser(this.curUserId());
+    this.accounts = accountsPage.accounts;
+  };
+}
