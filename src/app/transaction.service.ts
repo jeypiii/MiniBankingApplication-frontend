@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Utilities } from './utils.service';
 import { Transaction } from './types/transaction';
+import { Balance } from './types/account';
 
 export type TransactionsPage = {
     transactions: Transaction[],
@@ -101,4 +102,40 @@ export class TransactionService {
     });
   }
 
+  async getBalanceCheck(accountId: number) 
+  : Promise<Balance | null> {
+    let endpoint = `${this.utilities.getServerUrl()}/api/checkBalance/${accountId}`;
+    const bearerToken = this.utilities.getAuthToken();
+    console.log("GET", endpoint, bearerToken);
+
+    let returnVal: Balance | null;
+    return await fetch(endpoint, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": bearerToken
+        }
+    }).then(async (response) => {
+    if (response.ok) {
+        const balance: Balance = await response.json()
+        console.log("balance ", balance);
+        return balance;
+    } else {
+        const errorMessage = await response.text();
+        alert("ERROR: " + errorMessage);
+
+        return null;
+    }
+    }).then((promiseReturnVal: Balance | null) => {
+        if (promiseReturnVal === null) {
+            // TODO: send dummy account value on error?
+            returnVal = null;
+        } else {
+            returnVal = promiseReturnVal;
+        }
+
+        console.warn("RETURNING", returnVal);
+        return returnVal;
+    });
+  }
 }
