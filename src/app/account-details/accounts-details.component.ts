@@ -80,6 +80,7 @@ export class AccountDetailsComponent implements OnInit{
       alert(errMsg);
     } else {
       this.transactions = transactionsGet.transactions;
+      this.transactions.sort((a, b) => a.closureTimeStamp <= b.closureTimeStamp ? 1 : -1);
     }
   };
 
