@@ -57,14 +57,12 @@ import { AccountService, AccountsPage } from '../account.service';
   `
 })
 export class AccountsDashboardComponent implements OnInit{
-  // curUserId = input.required<number>();
-  curUserId = signal(2);
-
   accountsService = inject(AccountService);
   accounts: Account[] = [];
 
   async ngOnInit() {
-    const accountsPage: AccountsPage = await this.accountsService.getAccountsOfUser(this.curUserId());
+    const curUserId = this.accountsService.getCurUserId();
+    const accountsPage: AccountsPage = await this.accountsService.getAccountsOfUser(curUserId);
     this.accounts = accountsPage.accounts;
   };
 }
