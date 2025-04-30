@@ -19,7 +19,19 @@ export type Account = {
     balance: Balance,
 }
 
-// AccountDto
+// AccountDetailsDto
+export type AccountDetails = {
+    accountId: number,
+    accountNumber: number,
+    user: unknown,  // TODO: add User type
+    ownerName: string,
+    accountType: AccountType,
+    balance: Balance,
+    creationTimestamp: Date,
+    closureTimestamp: Date,
+}
+
+// BalanceDto
 export type Balance = {
     // TODO: use class equivalent to BigDecimal
     currencyCode: string,
