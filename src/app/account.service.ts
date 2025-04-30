@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Utilities } from './utils.service';
-import { Account, Balance } from './types/account';
+import { Account, AccountDetails, Balance } from './types/account';
 
 export type AccountsPage = {
     accounts: Account[],
@@ -109,6 +109,44 @@ export class AccountService {
         return null;
     }
     }).then((promiseReturnVal: Account | null) => {
+        if (promiseReturnVal === null) {
+            // TODO: send dummy account value on error?
+            returnVal = null;
+        } else {
+            returnVal = promiseReturnVal;
+        }
+
+        console.warn("RETURNING", returnVal);
+        return returnVal;
+    });
+  }
+
+  async getAccountDetails(accountId: number) 
+  : Promise<AccountDetails | null> {
+    let endpoint = `${this.utilities.getServerUrl()}/api/getAccountDetails/${accountId}`;
+    const bearerToken = this.utilities.getAuthToken();
+    console.log("GET", endpoint, bearerToken);
+
+    let returnVal: AccountDetails | null;
+    return await fetch(endpoint, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": bearerToken
+        }
+    }).then(async (response) => {
+    if (response.ok) {
+        let account = await response.json()
+
+        console.log("account ", account);
+        return account;
+    } else {
+        const errorMessage = await response.text();
+        alert("ERROR: " + errorMessage);
+
+        return null;
+    }
+    }).then((promiseReturnVal: AccountDetails | null) => {
         if (promiseReturnVal === null) {
             // TODO: send dummy account value on error?
             returnVal = null;
