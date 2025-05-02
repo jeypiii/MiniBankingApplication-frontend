@@ -1,7 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Utilities } from './utils.service';
-import { Transaction } from './types/transaction';
+import { Transaction, TransactionType } from './types/transaction';
 import { Balance } from './types/account';
+import { Authentication } from './authentication.service';
+import { AccountService } from './account.service';
 
 export type TransactionsPage = {
     transactions: Transaction[],
@@ -13,8 +15,11 @@ export type TransactionsPage = {
 })
 export class TransactionService {
   utilities: Utilities;
+  accountService: AccountService;
+
   constructor() {
     this.utilities = inject(Utilities);
+    this.accountService = inject(AccountService);
   }
 
   async getTransactionsForAccount(accountId: number, page?: number) 
@@ -137,5 +142,58 @@ export class TransactionService {
         console.warn("RETURNING", returnVal);
         return returnVal;
     });
+  }
+
+  async submitFundTransferForm(event: SubmitEvent) {
+    event.preventDefault();
+
+    const form = event.currentTarget as HTMLFormElement;
+
+    let fundTransferForm = new FormData(form);
+    const sourceAccountId = parseInt(fundTransferForm.get("sourceAccountId")!.toString());
+    const targetAccountId = await this.accountService.getAccountIdForAccountNumber(
+            parseInt(fundTransferForm.get("targetAccountNumber")?.toString() !)
+        );
+
+    let fundTransferJson = {
+        "transactionType": {
+            "typeId": 2,
+            "name": "FUND_TRANSFER"
+        },
+        "sourceAccountId": sourceAccountId,
+        "targetAccountId": targetAccountId,
+        "affectedBalance": {
+            "depositBalance": parseFloat(fundTransferForm.get("amount")!.toString()),
+            "totalBalance": 1E+3
+        }
+    };
+
+    let endpoint = `${this.utilities.getServerUrl()}/api/fundTransfer`;
+    const bearerToken = this.utilities.getAuthToken();
+    console.log("POST", endpoint, fundTransferJson, bearerToken);
+
+    return fetch(endpoint, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": bearerToken,
+        },
+        body: JSON.stringify(fundTransferJson),
+    }).then(response => {
+        if (response.ok) {
+            response.json().then(data => {
+                console.log("FUND TRANSFER", data);
+                return true;
+            });
+
+            return true;
+        } else {
+            response.text().then(data => {
+                alert("ERROR: " + data);
+            })
+            
+            return false;
+        }
+    }).catch(() => false);
   }
 }

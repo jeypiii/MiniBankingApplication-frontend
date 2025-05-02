@@ -31,7 +31,9 @@ import { Utilities } from '../utils.service';
             <ng-icon name="heroBanknotes" class="ml-auto h-5 w-5 text-gray-50" />
             Check Balance 
           </button>
-          <button type="submit" class="m-5 mt-4 w-full flex-1 h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50">
+          <button type="submit" class="m-5 mt-4 w-full flex-1 h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+            (click)="this.newFundTransfer()"
+          >
             <ng-icon name="heroPaperAirplane" class="ml-auto h-5 w-5 text-gray-50" />
             New Fund Transfer 
           </button>
@@ -90,5 +92,9 @@ export class AccountDetailsComponent implements OnInit{
     alert(`The current balance for Account No. ${accountId}: ${this.utitilities.formatNetBalance(this.account.balance)}`);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
     this.router.navigate(['account', this.account.accountId]));
+  }
+
+  async newFundTransfer() {
+    this.router.navigate(['fundTransfer', this.account.accountId]);
   }
 }

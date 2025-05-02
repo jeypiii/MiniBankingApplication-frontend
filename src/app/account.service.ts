@@ -128,6 +128,51 @@ export class AccountService {
     });
   }
 
+  async getAccountIdForAccountNumber(accountNumber: number, withBalance?: boolean) 
+  : Promise<Account | null> {
+    let endpoint = `${this.utilities.getServerUrl()}/api/getAccountIdForAccountNumber/${accountNumber}`;
+    const bearerToken = this.utilities.getAuthToken();
+    console.log("GET", endpoint, bearerToken);
+
+    let returnVal: Account | null;
+    return await fetch(endpoint, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": bearerToken
+        }
+    }).then(async (response) => {
+    if (response.ok) {
+        let account = await response.json()
+
+        if (withBalance) {
+            const balance = await this.getBalance(accountNumber);
+            if (balance) {
+                account.balance = balance;
+            }
+            // TODO: handle balance === null
+        }
+        console.log("account ", account);
+        return account;
+    } else {
+        const errorMessage = await response.text();
+        alert("ERROR: " + errorMessage);
+
+        return null;
+    }
+    }).then((promiseReturnVal: Account | null) => {
+        if (promiseReturnVal === null) {
+            // TODO: send dummy account value on error?
+            returnVal = null;
+        } else {
+            returnVal = promiseReturnVal;
+        }
+
+        console.warn("RETURNING", returnVal);
+        return returnVal;
+    });
+  }
+
   async getAccountDetails(accountId: number) 
   : Promise<AccountDetails | null> {
     let endpoint = `${this.utilities.getServerUrl()}/api/getAccountDetails/${accountId}`;
