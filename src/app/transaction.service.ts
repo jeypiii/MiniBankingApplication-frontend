@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { bigDecimal } from 'js-big-decimal';
 
 import { Utilities } from './utils.service';
-import { Transaction, TransactionType } from './types/transaction';
+import { Transaction, TransactionType, TransactionTypes } from './types/transaction';
 import { Balance } from './types/account';
 import { Authentication } from './authentication.service';
 import { AccountService } from './account.service';
@@ -146,9 +146,7 @@ export class TransactionService {
     });
   }
 
-  async submitFundTransferForm(event: SubmitEvent) {
-    event.preventDefault();
-
+  async fundTransferFormtoTransaction(event: SubmitEvent) {
     const form = event.currentTarget as HTMLFormElement;
 
     let fundTransferForm = new FormData(form);
@@ -163,7 +161,8 @@ export class TransactionService {
 
     let fundTransferJson = {
         "transactionType": {
-            "typeId": 2,
+            "typeId": TransactionTypes.FUND_TRANSFER.valueOf(),
+            // TODO: don't hardcode string name value
             "name": "FUND_TRANSFER"
         },
         "sourceAccountId": sourceAccountId,
@@ -173,6 +172,14 @@ export class TransactionService {
             "totalBalance": amountBigDecimal,
         }
     };
+
+    return fundTransferJson;
+  }
+
+  async submitFundTransferForm(event: SubmitEvent) {
+    event.preventDefault();
+
+    const fundTransferJson = await this.fundTransferFormtoTransaction(event);
 
     let endpoint = `${this.utilities.getServerUrl()}/api/fundTransfer`;
     const bearerToken = this.utilities.getAuthToken();
