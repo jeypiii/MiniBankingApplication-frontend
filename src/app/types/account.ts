@@ -17,6 +17,7 @@ export type Account = {
     ownerName: string,
     accountType: AccountType,
     balance: Balance,
+    closed: boolean,
 }
 
 // AccountDetailsDto
