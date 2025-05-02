@@ -8,17 +8,24 @@ import { Transaction } from '../types/transaction';
 import { TransactionCardComponent } from "../transaction-card.component";
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroBanknotes, heroPaperAirplane} from '@ng-icons/heroicons/outline'
+import { heroBanknotes, heroPaperAirplane, heroUserMinus} from '@ng-icons/heroicons/outline'
 import { Utilities } from '../utils.service';
 
 @Component({
   selector: 'app-account-details',
   imports: [AccountCardComponent, TransactionCardComponent, NgIcon],
-  providers: [provideIcons({ heroBanknotes, heroPaperAirplane})],
+  providers: [provideIcons({ heroBanknotes, heroPaperAirplane, heroUserMinus})],
   template: `
     <h1 class="mb-4 text-xl md:text-2xl">
-      <div>
-      Details for Account No. {{ this.account.accountNumber }}
+      <div class="flex flex-row">
+        <h2 class="flex-2"> Details for Account No. {{ this.account.accountNumber }} </h2>
+        <button type="submit" class="m-5 mt-4 w-full flex-1 h-10 items-center rounded-lg bg-red-500 px-4 text-sm font-medium text-white transition-colors hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500 active:bg-red-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+          (click)="this.closeAccount()"
+        >
+          <ng-icon name="heroUserMinus" class="ml-auto h-5 w-5 text-gray-50" />
+          Close Account 
+        </button>
+
       </div>
     </h1>
     <div>
@@ -96,5 +103,12 @@ export class AccountDetailsComponent implements OnInit{
 
   async newFundTransfer() {
     this.router.navigate(['fundTransfer', this.account.accountId]);
+  }
+
+  async closeAccount() {
+    if (confirm(`Are you sure you want to delete your ${this.account.accountType.name} account\n(ID: ${this.account.accountNumber})?`)) {
+      this.accountsService.closeAccount(this.account.accountId);
+      this.router.navigate(['accounts']);
+    }
   }
 }

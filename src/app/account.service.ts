@@ -247,4 +247,42 @@ export class AccountService {
         return returnVal;
     });
   }
+
+  async closeAccount(accountId: number) 
+  : Promise<Account | null> {
+    let endpoint = `${this.utilities.getServerUrl()}/api/closeAccount/${accountId}`;
+    const bearerToken = this.utilities.getAuthToken();
+    console.log("DELETE", endpoint, bearerToken);
+
+    let returnVal: Account | null;
+    return await fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": bearerToken
+        }
+    }).then(async (response) => {
+    if (response.ok) {
+        let account = await response.json()
+
+        console.log("account deleted", account);
+        return account;
+    } else {
+        const errorMessage = await response.text();
+        alert("ERROR: " + errorMessage);
+
+        return null;
+    }
+    }).then((promiseReturnVal: Account | null) => {
+        if (promiseReturnVal === null) {
+            // TODO: send dummy account value on error?
+            returnVal = null;
+        } else {
+            returnVal = promiseReturnVal;
+        }
+
+        console.warn("RETURNING", returnVal);
+        return returnVal;
+    });
+  }
 }
