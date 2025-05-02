@@ -5,6 +5,7 @@ import { heroKey, heroAtSymbol, heroArrowRight } from '@ng-icons/heroicons/outli
 
 import "@fontsource/lusitana";
 import { Authentication } from './authentication.service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'login-form',
@@ -15,7 +16,7 @@ import { Authentication } from './authentication.service';
       <h1 class="mb-4 text-xl md:text-2xl">
         Login
       </h1>
-      <form class="space-y-3" (submit)="this.authentication.login($event)">
+      <form class="space-y-3" (submit)="this.login($event)">
         <div class="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
           <h1 class="mb-3 text-2xl">
             Please log in to continue.
@@ -71,7 +72,13 @@ import { Authentication } from './authentication.service';
 })
 export default class LoginFormComponent {
   authentication;
-  constructor() {
+  constructor(private router: Router) {
     this.authentication = inject(Authentication);
+  }
+
+  login(event: SubmitEvent) {
+    this.authentication.login(event);
+
+    setTimeout(() => this.router.navigate(['accounts']), 0);
   }
 }
