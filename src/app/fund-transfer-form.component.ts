@@ -55,6 +55,7 @@ import { ActivatedRoute, Router } from "@angular/router";
                   class="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                   id="amount"
                   type="number"
+                  step="0.0001"
                   name="amount"
                   placeholder="Enter amount to transfer"
                 />
