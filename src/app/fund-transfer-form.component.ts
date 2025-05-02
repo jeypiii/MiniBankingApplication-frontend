@@ -38,8 +38,6 @@ import { ActivatedRoute, Router } from "@angular/router";
                   type="number"
                   name="targetAccountNumber"
                   placeholder="Enter the account number for the target account"
-                  minlength="9"
-                  required
                 />
                 <ng-icon name="heroIdentification" class="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
               </div>
@@ -58,10 +56,7 @@ import { ActivatedRoute, Router } from "@angular/router";
                   id="amount"
                   type="number"
                   name="amount"
-                  step="0.0001"
                   placeholder="Enter amount to transfer"
-                  required
-                  min="1"
                 />
                 <ng-icon name="heroBanknotes" class="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
               </div>

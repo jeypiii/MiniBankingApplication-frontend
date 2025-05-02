@@ -146,23 +146,47 @@ export class TransactionService {
     });
   }
 
-  async fundTransferFormtoTransaction(event: SubmitEvent) {
+  async submitFundTransferForm(event: SubmitEvent) {
+    event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
+    console.log("FORM", form);
 
     let fundTransferForm = new FormData(form);
     const sourceAccountId = parseInt(fundTransferForm.get("sourceAccountId")!.toString());
-    const targetAccountId = await this.accountService.getAccountIdForAccountNumber(
-            parseInt(fundTransferForm.get("targetAccountNumber")?.toString() !)
-        );
+    const targetAccountNumberRaw = fundTransferForm.get("targetAccountNumber")?.toString() !;
+    const amountRaw = fundTransferForm.get("amount")!.toString();
+
+    //  VALIDATION
+    // TODO: place this in client code
+    if (! (Number.isInteger(parseInt(targetAccountNumberRaw))
+           && targetAccountNumberRaw.toString().length == 9)
+      ){
+        alert("Target Account number must be a 8-digit number";
+        return null;
+    }
+
+    if (! (amountRaw && parseInt(amountRaw) > 0)) {
+        alert("Please enter a positive transfer amount");
+        return null;
+    }
+
+    // END OF VALIDATION
+
+    let targetAccountId = -1;
+    if (targetAccountNumberRaw) {
+        targetAccountId = await this.accountService.getAccountIdForAccountNumber(
+                parseInt(targetAccountNumberRaw)
+            )  as number;
+    }
 
     // NOTE: js-big-decimal functions similar to Java's BigDecimal to hopefully prevent precision errors
-    const amountBigDecimal = new bigDecimal(fundTransferForm.get("amount")!.toString())
+    const amountBigDecimal = new bigDecimal(amountRaw)
                                 .stripTrailingZero().getValue();
 
     let fundTransferJson = {
         "transactionType": {
             "typeId": TransactionTypes.FUND_TRANSFER.valueOf(),
-            // TODO: don't hardcode string name value
+            // TODO: don't hardcode string name
             "name": "FUND_TRANSFER"
         },
         "sourceAccountId": sourceAccountId,
@@ -172,14 +196,6 @@ export class TransactionService {
             "totalBalance": amountBigDecimal,
         }
     };
-
-    return fundTransferJson;
-  }
-
-  async submitFundTransferForm(event: SubmitEvent) {
-    event.preventDefault();
-
-    const fundTransferJson = await this.fundTransferFormtoTransaction(event);
 
     let endpoint = `${this.utilities.getServerUrl()}/api/fundTransfer`;
     const bearerToken = this.utilities.getAuthToken();
