@@ -1,4 +1,6 @@
 import { inject, Injectable } from '@angular/core';
+import { bigDecimal } from 'js-big-decimal';
+
 import { Utilities } from './utils.service';
 import { Transaction, TransactionType } from './types/transaction';
 import { Balance } from './types/account';
@@ -155,6 +157,10 @@ export class TransactionService {
             parseInt(fundTransferForm.get("targetAccountNumber")?.toString() !)
         );
 
+    // NOTE: js-big-decimal functions similar to Java's BigDecimal to hopefully prevent precision errors
+    const amountBigDecimal = new bigDecimal(fundTransferForm.get("amount")!.toString())
+                                .stripTrailingZero().getValue();
+
     let fundTransferJson = {
         "transactionType": {
             "typeId": 2,
@@ -163,8 +169,8 @@ export class TransactionService {
         "sourceAccountId": sourceAccountId,
         "targetAccountId": targetAccountId,
         "affectedBalance": {
-            "depositBalance": parseFloat(fundTransferForm.get("amount")!.toString()),
-            "totalBalance": 1E+3
+            "depositBalance": amountBigDecimal,
+            "totalBalance": amountBigDecimal,
         }
     };
 

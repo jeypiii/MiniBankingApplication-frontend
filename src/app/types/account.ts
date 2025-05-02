@@ -1,3 +1,5 @@
+import { bigDecimal } from 'js-big-decimal';
+
 // TODO: get these types directly from backend
 export enum AccountTypes {
     CHECKINGS = 1,
@@ -36,6 +38,6 @@ export type AccountDetails = {
 export type Balance = {
     // TODO: use class equivalent to BigDecimal
     currencyCode: string,
-    depositBalance: string,
-    totalBalance: string,
+    depositBalance: bigDecimal,
+    totalBalance: bigDecimal,
 }
