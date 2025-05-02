@@ -37,7 +37,10 @@ export class Utilities {
   }
 
   formatNetBalance(balance: Balance) {
-    return `${balance.currencyCode} ${balance.totalBalance}`;
+    console.log("FORMAT BALANCE", balance, typeof balance.totalBalance)
+    // TODO: find out why typeof balance.totalBalance  === number, NOT bigDecimal
+    //       since we want to use bigDecimal.getPrettyValue() instead of number.toLocaleString()
+    return `${balance.currencyCode} ${balance.totalBalance.toLocaleString()}`;
   }
 
   formatAccountType(accountType: AccountType) {
