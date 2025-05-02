@@ -129,12 +129,12 @@ export class AccountService {
   }
 
   async getAccountIdForAccountNumber(accountNumber: number, withBalance?: boolean) 
-  : Promise<Account | null> {
+  : Promise<number | null> {
     let endpoint = `${this.utilities.getServerUrl()}/api/getAccountIdForAccountNumber/${accountNumber}`;
     const bearerToken = this.utilities.getAuthToken();
     console.log("GET", endpoint, bearerToken);
 
-    let returnVal: Account | null;
+    let returnVal: number | null;
     return await fetch(endpoint, {
         method: "GET",
         headers: {
@@ -160,7 +160,7 @@ export class AccountService {
 
         return null;
     }
-    }).then((promiseReturnVal: Account | null) => {
+    }).then((promiseReturnVal: number | null) => {
         if (promiseReturnVal === null) {
             // TODO: send dummy account value on error?
             returnVal = null;
